@@ -1,5 +1,5 @@
 """Random sampling utilities."""
 
-from .sampler import Sampler
+# Sampler implementation is a placeholder for now
 
-__all__ = ["Sampler"]
+__all__ = []

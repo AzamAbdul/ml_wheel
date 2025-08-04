@@ -5,6 +5,5 @@ __author__ = "Azam"
 
 from .math import Matrix, Vector
 from .autograd import ComputationGraph
-from .random import Sampler
 
-__all__ = ["Matrix", "Vector", "ComputationGraph", "Sampler"]
+__all__ = ["Matrix", "Vector", "ComputationGraph"]
