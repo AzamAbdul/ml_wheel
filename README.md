@@ -1,8 +1,8 @@
-# ML Wheel 🛞
+# ML Wheel
 
 A from-scratch machine learning library built purely for educational purposes. This project implements core ML components without relying on external libraries like NumPy or PyTorch.
 
-## 🎯 Purpose
+## Purpose
 
 This is primarily a learning exercise to understand the mathematical foundations of machine learning by implementing everything from scratch. Perfect for:
 
@@ -11,7 +11,7 @@ This is primarily a learning exercise to understand the mathematical foundations
 - Exploring ML algorithms at a fundamental level
 - Building intuition for optimization and gradients
 
-## 🏗️ Current Components
+## Current Components
 
 ### Math Module (`src/math/`)
 - **Matrix**: Basic matrix operations (addition, multiplication, transpose)
@@ -23,7 +23,7 @@ This is primarily a learning exercise to understand the mathematical foundations
 ### Random Module (`src/random/`)
 - **Sampler**: Random sampling utilities (placeholder)
 
-## 🚀 Usage
+## Usage
 
 ```python
 from src.math import Matrix, Vector
