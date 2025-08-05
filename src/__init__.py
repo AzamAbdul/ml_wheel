@@ -5,5 +5,6 @@ __author__ = "Azam"
 
 from .math import Matrix, Vector, ActivationFunctions
 from .autograd import ComputationGraph
+from .loss import Loss
 
-__all__ = ["Matrix", "Vector", "ActivationFunctions", "ComputationGraph"]
+__all__ = ["Matrix", "Vector", "ActivationFunctions", "ComputationGraph", "Loss"]

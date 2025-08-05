@@ -16,8 +16,8 @@ def test_matrix_operations():
     
     # Create first matrix: [[1, 0], [0, 3]]
     m1 = Matrix(2, 2)
-    assert m1.set_val_at(0, 0, 1) == True
-    assert m1.set_val_at(1, 1, 3) == True
+    m1.set_val_at(0, 0, 1)
+    m1.set_val_at(1, 1, 3)
     assert m1.get_val_at(0, 0) == 1
     assert m1.get_val_at(1, 1) == 3
     assert m1.get_val_at(0, 1) == 0  # Should be 0 (default)
@@ -27,10 +27,10 @@ def test_matrix_operations():
 
     # Create second matrix: [[1, 10], [3, 4]]
     m2 = Matrix(2, 2)
-    assert m2.set_val_at(0, 0, 1) == True
-    assert m2.set_val_at(1, 1, 4) == True
-    assert m2.set_val_at(0, 1, 10) == True
-    assert m2.set_val_at(1, 0, 3) == True
+    m2.set_val_at(0, 0, 1)
+    m2.set_val_at(1, 1, 4)
+    m2.set_val_at(0, 1, 10)
+    m2.set_val_at(1, 0, 3)
     print("Matrix m2:")
     m2.print()
     print()
@@ -38,7 +38,6 @@ def test_matrix_operations():
     # Test addition: [[2, 10], [3, 7]]
     print("m1 + m2:")
     result_add = Matrix.add(m1, m2)
-    assert result_add is not None
     assert result_add.get_val_at(0, 0) == 2  # 1 + 1
     assert result_add.get_val_at(0, 1) == 10  # 0 + 10
     assert result_add.get_val_at(1, 0) == 3   # 0 + 3
@@ -49,7 +48,6 @@ def test_matrix_operations():
     # Test subtraction: [[0, -10], [-3, -1]]
     print("m1 - m2:")
     result_sub = Matrix.add(m1, m2, subtract=True)
-    assert result_sub is not None
     assert result_sub.get_val_at(0, 0) == 0   # 1 - 1
     assert result_sub.get_val_at(0, 1) == -10 # 0 - 10
     assert result_sub.get_val_at(1, 0) == -3  # 0 - 3
@@ -60,7 +58,6 @@ def test_matrix_operations():
     # Test multiplication: [[1, 10], [9, 12]]
     print("m1 * m2:")
     m3 = Matrix.multiply(m1, m2)
-    assert m3 is not None
     assert m3.get_val_at(0, 0) == 1   # 1*1 + 0*3 = 1
     assert m3.get_val_at(0, 1) == 10  # 1*10 + 0*4 = 10
     assert m3.get_val_at(1, 0) == 9   # 0*1 + 3*3 = 9
@@ -86,8 +83,8 @@ def test_vector_operations():
     
     # Create first vector: [0, 1, 2, 0, 0]
     v = Vector(5)
-    assert v.set(1, 1) == True
-    assert v.set(2, 2) == True
+    v.set(1, 1)
+    v.set(2, 2)
     assert v.get(0) == 0
     assert v.get(1) == 1
     assert v.get(2) == 2
@@ -108,9 +105,9 @@ def test_vector_operations():
 
     # Create second vector: [3, 4, 3, 0, 0]
     v2 = Vector(5)
-    assert v2.set(0, 3) == True
-    assert v2.set(1, 4) == True
-    assert v2.set(2, 3) == True
+    v2.set(0, 3)
+    v2.set(1, 4)
+    v2.set(2, 3)
     print("Vector v2:")
     v2.print()
     
@@ -149,14 +146,15 @@ def test_error_cases():
     m1 = Matrix(2, 3)
     m2 = Matrix(3, 2)
     
-    # This should return None (dimension mismatch for addition)
-    result = Matrix.add(m1, m2)
-    assert result is None
-    print(f"Adding 2x3 and 3x2 matrices: {result}")
+    # This should raise ValueError (dimension mismatch for addition)
+    try:
+        result = Matrix.add(m1, m2)
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        print(f"Adding 2x3 and 3x2 matrices correctly raised: {type(e).__name__}")
     
     # This should work for multiplication (2x3 * 3x2 = 2x2)
     result = Matrix.multiply(m1, m2)
-    assert result is not None
     assert result.get_rows() == 2
     assert result.get_cols() == 2
     print(f"Multiplying 2x3 by 3x2 matrices: Success")
@@ -164,36 +162,58 @@ def test_error_cases():
     # Test invalid multiplication dimensions
     m3 = Matrix(2, 3)
     m4 = Matrix(2, 3)  # Can't multiply 2x3 by 2x3
-    result = Matrix.multiply(m3, m4)
-    assert result is None
-    print(f"Invalid multiplication (2x3 * 2x3): {result}")
+    try:
+        result = Matrix.multiply(m3, m4)
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        print(f"Invalid multiplication (2x3 * 2x3) correctly raised: {type(e).__name__}")
     
     # Test out of bounds access
     m = Matrix(2, 2)
-    val = m.get_val_at(5, 5)  # Out of bounds
-    assert val is None
-    print(f"Out of bounds access: {val}")
+    try:
+        val = m.get_val_at(5, 5)  # Out of bounds
+        assert False, "Should have raised IndexError"
+    except IndexError as e:
+        print(f"Out of bounds access correctly raised: {type(e).__name__}")
     
     # Test out of bounds setting
-    success = m.set_val_at(-1, 0, 5)
-    assert success == False
-    success = m.set_val_at(0, 10, 5)
-    assert success == False
+    try:
+        m.set_val_at(-1, 0, 5)
+        assert False, "Should have raised IndexError"
+    except IndexError:
+        pass
+    
+    try:
+        m.set_val_at(0, 10, 5)
+        assert False, "Should have raised IndexError"
+    except IndexError:
+        pass
+    
     print("Out of bounds setting: Correctly rejected")
     
     # Test vector dimension mismatch
     v1 = Vector(3)
     v2 = Vector(5)
-    dot = Vector.dot_product(v1, v2)
-    assert dot is None
-    print(f"Dot product of different sized vectors: {dot}")
+    try:
+        dot = Vector.dot_product(v1, v2)
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        print(f"Dot product of different sized vectors correctly raised: {type(e).__name__}")
     
     # Test vector out of bounds
     v = Vector(3)
-    val = v.get(10)
-    assert val is None
-    result = v.set(-1, 5)
-    assert result is None
+    try:
+        val = v.get(10)
+        assert False, "Should have raised IndexError"
+    except IndexError:
+        pass
+    
+    try:
+        v.set(-1, 5)
+        assert False, "Should have raised IndexError"
+    except IndexError:
+        pass
+    
     print("Vector out of bounds access: Correctly handled")
     print()
 

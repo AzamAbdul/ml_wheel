@@ -1,4 +1,4 @@
-from typing import Optional
+# Type annotations only using built-in types
 
 
 class Matrix:
@@ -16,21 +16,16 @@ class Matrix:
         for row in self.matrix:
             print(row)
 
-    def set_val_at(self, i: int, j: int, val: float) -> bool:
-        """Set value at position (i, j). Returns True if successful, False if out of bounds."""
-        if i >= self.rows or i < 0:
-            return False
-        if j >= self.cols or j < 0:
-            return False
+    def set_val_at(self, i: int, j: int, val: float) -> None:
+        """Set value at position (i, j). Raises IndexError if out of bounds."""
+        if i >= self.rows or i < 0 or j >= self.cols or j < 0:
+            raise IndexError(f"Index ({i}, {j}) out of bounds for {self.rows}x{self.cols} matrix")
         self.matrix[i][j] = val
-        return True
 
-    def get_val_at(self, i: int, j: int) -> Optional[float]:
-        """Get value at position (i, j). Returns None if out of bounds."""
-        if i >= self.rows or i < 0:
-            return None
-        if j >= self.cols or j < 0:
-            return None
+    def get_val_at(self, i: int, j: int) -> float:
+        """Get value at position (i, j). Raises IndexError if out of bounds."""
+        if i >= self.rows or i < 0 or j >= self.cols or j < 0:
+            raise IndexError(f"Index ({i}, {j}) out of bounds for {self.rows}x{self.cols} matrix")
         return self.matrix[i][j]
 
     def get_rows(self) -> int:
@@ -42,7 +37,7 @@ class Matrix:
         return self.cols
 
     @staticmethod
-    def add(m1: 'Matrix', m2: 'Matrix', subtract: bool = False) -> Optional['Matrix']:
+    def add(m1: 'Matrix', m2: 'Matrix', subtract: bool = False) -> 'Matrix':
         """Add or subtract two matrices element-wise.
         
         Args:
@@ -51,17 +46,18 @@ class Matrix:
             subtract: If True, performs subtraction (m1 - m2)
             
         Returns:
-            Result matrix or None if dimensions don't match
+            Result matrix
+            
+        Raises:
+            ValueError: If matrix dimensions don't match
         """
+        # Check dimensions match
+        if m1.get_rows() != m2.get_rows() or m1.get_cols() != m2.get_cols():
+            raise ValueError(f"Cannot add matrices of shapes ({m1.get_rows()}, {m1.get_cols()}) and ({m2.get_rows()}, {m2.get_cols()})")
+        
         sign = 1
         if subtract:
             sign = -1
-        
-        # Check dimensions match
-        if m1.get_rows() != m2.get_rows():
-            return None
-        if m1.get_cols() != m2.get_cols():
-            return None
         
         result = Matrix(m1.get_rows(), m1.get_cols())
         for i in range(0, m1.get_rows()):
@@ -72,7 +68,7 @@ class Matrix:
         return result
     
     @staticmethod
-    def multiply(m1: 'Matrix', m2: 'Matrix') -> Optional['Matrix']:
+    def multiply(m1: 'Matrix', m2: 'Matrix') -> 'Matrix':
         """Matrix multiplication using dot product.
         
         Args:
@@ -80,11 +76,14 @@ class Matrix:
             m2: Right matrix
             
         Returns:
-            Result matrix or None if dimensions incompatible
+            Result matrix
+            
+        Raises:
+            ValueError: If dimensions are incompatible for multiplication
         """
         # Check if multiplication is valid (m1 cols must equal m2 rows)
         if m1.get_cols() != m2.get_rows():
-            return None
+            raise ValueError(f"Cannot multiply matrices: {m1.get_rows()}x{m1.get_cols()} by {m2.get_rows()}x{m2.get_cols()}")
             
         num_rows = m1.get_rows()
         num_cols = m2.get_cols()

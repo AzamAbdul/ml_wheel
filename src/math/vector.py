@@ -1,5 +1,5 @@
 import math
-from typing import Optional
+# Type annotations only using built-in types
 
 
 class Vector:
@@ -13,21 +13,20 @@ class Vector:
         """Get the size/dimension of the vector."""
         return len(self.vector)
 
-    def get(self, i: int) -> Optional[float]:
-        """Get value at index i. Returns None if out of bounds."""
+    def get(self, i: int) -> float:
+        """Get value at index i. Raises IndexError if out of bounds."""
         if i >= len(self.vector) or i < 0:
-            return None
+            raise IndexError(f"Index {i} out of bounds for vector of size {len(self.vector)}")
         return self.vector[i]
 
-    def set(self, i: int, v: float) -> Optional[bool]:
-        """Set value at index i. Returns None if out of bounds."""
+    def set(self, i: int, v: float) -> None:
+        """Set value at index i. Raises IndexError if out of bounds."""
         if i >= len(self.vector) or i < 0:
-            return None
+            raise IndexError(f"Index {i} out of bounds for vector of size {len(self.vector)}")
         self.vector[i] = v
-        return True
 
     @staticmethod
-    def dot_product(v1: 'Vector', v2: 'Vector') -> Optional[float]:
+    def dot_product(v1: 'Vector', v2: 'Vector') -> float:
         """Compute dot product of two vectors.
         
         Args:
@@ -35,10 +34,13 @@ class Vector:
             v2: Second vector
             
         Returns:
-            Dot product or None if dimensions don't match
+            Dot product
+            
+        Raises:
+            ValueError: If vector dimensions don't match
         """
         if v1.size() != v2.size():
-            return None
+            raise ValueError(f"Cannot compute dot product of vectors with sizes {v1.size()} and {v2.size()}")
         
         result = 0.0
         for i in range(v1.size()):
