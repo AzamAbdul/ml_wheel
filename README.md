@@ -16,6 +16,7 @@ This is primarily a learning exercise to understand the mathematical foundations
 ### Math Module (`src/math/`)
 - **Matrix**: Basic matrix operations (addition, multiplication, transpose)
 - **Vector**: Vector operations (dot product, L2 norm, projection)
+- **ActivationFunctions**: Neural network activation functions (ReLU, Sigmoid, Tanh)
 
 ### Autograd Module (`src/autograd/`)
 - **ComputationGraph**: Foundation for automatic differentiation (placeholder)
@@ -26,7 +27,7 @@ This is primarily a learning exercise to understand the mathematical foundations
 ## Usage
 
 ```python
-from src.math import Matrix, Vector
+from src.math import Matrix, Vector, ActivationFunctions
 
 # Create matrices
 m1 = Matrix(2, 2)
@@ -38,9 +39,9 @@ m2.set_val_at(0, 0, 2)
 m2.set_val_at(1, 1, 4)
 
 # Matrix operations
-result = Matrix.add(m1, m2)
-product = Matrix.multiply(m1, m2)
-transposed = Matrix.transpose(result)
+result = Matrix.add(m1, m2)      # Addition
+product = Matrix.multiply(m1, m2) # Matrix multiplication
+transposed = Matrix.transpose(result) # Transpose
 
 # Vector operations
 v1 = Vector(3)
@@ -51,8 +52,14 @@ v2 = Vector(3)
 v2.set(0, 3)
 v2.set(1, 4)
 
-dot_product = Vector.dot_product(v1, v2)
-norm = v1.l2_norm()
+dot_product = Vector.dot_product(v1, v2) # Dot product
+norm = v1.l2_norm()                      # Euclidean norm
+projection = Vector.project(v2, v1)      # Vector projection
+
+# Activation functions
+output = ActivationFunctions.relu(-2.5)    # → 0.0
+output = ActivationFunctions.sigmoid(0.0)  # → 0.5
+output = ActivationFunctions.tanh(1.0)     # → 0.7616...
 ```
 
 ## 🧪 Testing
@@ -66,17 +73,19 @@ python tests/test_math.py
 The tests include:
 - Matrix operations with known expected results
 - Vector calculations with mathematical verification
+- Activation function boundary conditions and mathematical properties
 - Error handling for invalid operations
-- Boundary condition testing
+- Comprehensive edge case testing
 
 ## 📚 Learning Goals
 
 - [x] Basic matrix and vector operations
+- [x] Activation functions (ReLU, Sigmoid, Tanh)
 - [ ] Automatic differentiation (backpropagation)
-- [ ] Neural network primitives
+- [ ] Neural network primitives (layers, forward pass)
+- [ ] Loss functions (MSE, Cross-entropy)
 - [ ] Optimization algorithms (SGD, Adam)
-- [ ] Loss functions
-- [ ] Activation functions
+- [ ] Gradient computation and backpropagation
 
 ## 🔧 Development
 
