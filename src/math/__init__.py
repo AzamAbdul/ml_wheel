@@ -2,5 +2,6 @@
 
 from .matrix import Matrix
 from .vector import Vector
+from .activation_functions import ActivationFunctions
 
-__all__ = ["Matrix", "Vector"]
+__all__ = ["Matrix", "Vector", "ActivationFunctions"]

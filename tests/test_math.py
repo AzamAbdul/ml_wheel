@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from src.math.matrix import Matrix
 from src.math.vector import Vector
+from src.math.activation_functions import ActivationFunctions
 
 
 def test_matrix_operations():
@@ -197,6 +198,41 @@ def test_error_cases():
     print()
 
 
+def test_activation_functions():
+    """Test activation functions."""
+    print("Testing Activation Functions")
+    print("=" * 40)
+    
+    # Test ReLU
+    assert ActivationFunctions.relu(5.0) == 5.0
+    assert ActivationFunctions.relu(-3.0) == 0.0
+    assert ActivationFunctions.relu(0.0) == 0.0
+    print("✓ ReLU tests passed")
+    
+    # Test Sigmoid
+    sig_0 = ActivationFunctions.sigmoid(0.0)
+    assert abs(sig_0 - 0.5) < 1e-10  # sigmoid(0) = 0.5
+    
+    sig_large = ActivationFunctions.sigmoid(100.0)
+    assert abs(sig_large - 1.0) < 1e-10  # sigmoid(large) ≈ 1
+    
+    sig_negative = ActivationFunctions.sigmoid(-100.0)
+    assert abs(sig_negative - 0.0) < 1e-10  # sigmoid(-large) ≈ 0
+    print("✓ Sigmoid tests passed")
+    
+    # Test Tanh
+    tanh_0 = ActivationFunctions.tanh(0.0)
+    assert abs(tanh_0 - 0.0) < 1e-10  # tanh(0) = 0
+    
+    tanh_large = ActivationFunctions.tanh(100.0)
+    assert abs(tanh_large - 1.0) < 1e-10  # tanh(large) ≈ 1
+    
+    tanh_negative = ActivationFunctions.tanh(-100.0)
+    assert abs(tanh_negative - (-1.0)) < 1e-10  # tanh(-large) ≈ -1
+    print("✓ Tanh tests passed")
+    print()
+
+
 def run_all_tests():
     """Run all tests and report results."""
     try:
@@ -208,6 +244,9 @@ def run_all_tests():
         
         test_error_cases()
         print("✓ Error handling tests passed")
+        
+        test_activation_functions()
+        print("✓ Activation functions tests passed")
         
         print("\n" + "="*50)
         print("ALL TESTS PASSED! 🎉")
