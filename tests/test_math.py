@@ -253,6 +253,77 @@ def test_activation_functions():
     print()
 
 
+def test_matrix_scalar_multiply():
+    """Test matrix scalar multiplication."""
+    print("Testing Matrix Scalar Multiply")
+    print("=" * 40)
+    
+    # Create test matrix: [[2, 4], [6, 8]]
+    m1 = Matrix(2, 2)
+    m1.set_val_at(0, 0, 2)
+    m1.set_val_at(0, 1, 4)
+    m1.set_val_at(1, 0, 6)
+    m1.set_val_at(1, 1, 8)
+    print("Original matrix:")
+    m1.print()
+    print()
+    
+    # Test multiply by 3: [[6, 12], [18, 24]]
+    result = Matrix.scalar_multiply(m1, 3)
+    assert result.get_val_at(0, 0) == 6   # 2 * 3
+    assert result.get_val_at(0, 1) == 12  # 4 * 3
+    assert result.get_val_at(1, 0) == 18  # 6 * 3
+    assert result.get_val_at(1, 1) == 24  # 8 * 3
+    print("Multiplied by 3:")
+    result.print()
+    print()
+    
+    # Test multiply by 0.5: [[1, 2], [3, 4]]
+    result_half = Matrix.scalar_multiply(m1, 0.5)
+    assert result_half.get_val_at(0, 0) == 1   # 2 * 0.5
+    assert result_half.get_val_at(0, 1) == 2   # 4 * 0.5
+    assert result_half.get_val_at(1, 0) == 3   # 6 * 0.5
+    assert result_half.get_val_at(1, 1) == 4   # 8 * 0.5
+    print("Multiplied by 0.5:")
+    result_half.print()
+    print()
+    
+    # Test multiply by 0: [[0, 0], [0, 0]]
+    result_zero = Matrix.scalar_multiply(m1, 0)
+    assert result_zero.get_val_at(0, 0) == 0
+    assert result_zero.get_val_at(0, 1) == 0
+    assert result_zero.get_val_at(1, 0) == 0
+    assert result_zero.get_val_at(1, 1) == 0
+    print("Multiplied by 0:")
+    result_zero.print()
+    print()
+    
+    # Test multiply by -1: [[-2, -4], [-6, -8]]
+    result_neg = Matrix.scalar_multiply(m1, -1)
+    assert result_neg.get_val_at(0, 0) == -2
+    assert result_neg.get_val_at(0, 1) == -4
+    assert result_neg.get_val_at(1, 0) == -6
+    assert result_neg.get_val_at(1, 1) == -8
+    print("Multiplied by -1:")
+    result_neg.print()
+    print()
+    
+    # Test with non-square matrix: 3x1 matrix
+    m2 = Matrix(3, 1)
+    m2.set_val_at(0, 0, 1)
+    m2.set_val_at(1, 0, 2)
+    m2.set_val_at(2, 0, 3)
+    result_rect = Matrix.scalar_multiply(m2, 2)
+    assert result_rect.get_val_at(0, 0) == 2
+    assert result_rect.get_val_at(1, 0) == 4
+    assert result_rect.get_val_at(2, 0) == 6
+    assert result_rect.get_rows() == 3
+    assert result_rect.get_cols() == 1
+    
+    print("✓ Scalar multiply tests passed")
+    print()
+
+
 def run_all_tests():
     """Run all tests and report results."""
     try:
@@ -267,6 +338,9 @@ def run_all_tests():
         
         test_activation_functions()
         print("✓ Activation functions tests passed")
+        
+        test_matrix_scalar_multiply()
+        print("✓ Matrix scalar multiply tests passed")
         
         print("\n" + "="*50)
         print("ALL TESTS PASSED! 🎉")

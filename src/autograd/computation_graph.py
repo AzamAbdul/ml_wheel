@@ -1,66 +1,59 @@
 """Computation graph for automatic differentiation."""
 
-from typing import List, Dict, Any, Optional
+class Value:
+    def __init__(self, data, _children=(), _op=''):
+        self.data = data
+        self.grad = 0
+        self._backward = lambda: None
+        self._prev = set(_children)
+        self._op = _op
 
+    def __add__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+        out = Value(self.data + other.data, (self, other), '+')
+        def _backward():
+            self.grad += out.grad
+            other.grad += out.grad
+        out._backward = _backward
+        return out
 
-class ComputationGraph:
-    """A basic computation graph for tracking operations and gradients.
-    
-    This is a placeholder implementation for future autograd functionality.
-    """
-    
-    def __init__(self) -> None:
-        """Initialize an empty computation graph."""
-        self.nodes: List[Dict[str, Any]] = []
-        self.edges: List[tuple] = []
-    
-    def add_node(self, operation: str, inputs: List[Any], output: Any) -> int:
-        """Add a node to the computation graph.
+    def __mul__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+        out = Value(self.data * other.data, (self, other), '*')
+
+        def _backward():
+            self.grad += other.grad * out.grad
+            other.grad += self.grad * out.grad
+        out._backward = _backward
+        return out
+
+    def __pow__(self, other):
+        out = Value(self.data ** other.data, (self, other), '**{other}')
+        def _backward():
+            self.grad += (other * self.data**(other-1)) * out.grad
+            # other ??
+        out._backward = _backward
+
+    def relu(self):
+        out = Value(0 if self.data < 0 else self.data, (self,) 'ReLU')
         
-        Args:
-            operation: Name of the operation (e.g., 'add', 'multiply')
-            inputs: Input values/nodes
-            output: Output value
-            
-        Returns:
-            Node ID
-        """
-        node_id = len(self.nodes)
-        node = {
-            'id': node_id,
-            'operation': operation,
-            'inputs': inputs,
-            'output': output,
-            'gradient': None
-        }
-        self.nodes.append(node)
-        return node_id
-    
-    def backward(self, node_id: int, gradient: float = 1.0) -> None:
-        """Compute gradients via backpropagation.
-        
-        Args:
-            node_id: Starting node for backpropagation
-            gradient: Initial gradient value
-        """
-        # Placeholder for backpropagation implementation
-        if node_id < len(self.nodes):
-            self.nodes[node_id]['gradient'] = gradient
-    
-    def get_gradient(self, node_id: int) -> Optional[float]:
-        """Get gradient for a specific node.
-        
-        Args:
-            node_id: Node to get gradient for
-            
-        Returns:
-            Gradient value or None
-        """
-        if node_id < len(self.nodes):
-            return self.nodes[node_id]['gradient']
-        return None
-    
-    def clear(self) -> None:
-        """Clear the computation graph."""
-        self.nodes.clear()
-        self.edges.clear()
+        def _backward():
+            self.grad += (out.data > 0) * out.grad
+        out._backward = _backward
+
+        return out
+
+    def backward(self):
+        top = []
+        visited = set()
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(child)
+                top.append(v)
+        build_topo(self)
+        self.grad = 1
+        for v in reversed(top):
+            v._backward()
+

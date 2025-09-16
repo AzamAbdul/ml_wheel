@@ -123,3 +123,22 @@ class Matrix:
                 v = m1.get_val_at(i, j)
                 result.set_val_at(j, i, v)
         return result
+
+    @staticmethod
+    def scalar_multiply(m1: 'Matrix', scalar: float) -> 'Matrix':
+        """Multiply all elements of a matrix by a scalar value.
+        
+        Args:
+            m1: Matrix to multiply
+            scalar: Scalar value to multiply by
+            
+        Returns:
+            New matrix with all elements multiplied by scalar
+        """
+        result = Matrix(m1.get_rows(), m1.get_cols())
+        
+        for i in range(m1.get_rows()):
+            for j in range(m1.get_cols()):
+                v = m1.get_val_at(i, j)
+                result.set_val_at(i, j, v * scalar)
+        return result
